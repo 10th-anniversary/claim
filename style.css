@@ -244,3 +244,18 @@ body {
     cursor: pointer;
     margin-top: 10px;
 }
+.custom-box {
+    text-align: center;
+}
+.btn-modal-close {
+    width: 100%;
+    background: #f39c12;
+    color: #12151c;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+}
