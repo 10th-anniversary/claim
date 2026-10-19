@@ -1,1 +1,261 @@
-.
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+    background-color: #12151c;
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+.main-container {
+    width: 100%;
+    max-width: 480px;
+    background: #1a1f2c;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    overflow: hidden;
+    border: 1px solid #2a344d;
+    margin-bottom: 70px;
+}
+.banner-container {
+    position: relative;
+    width: 100%;
+    height: 160px;
+    background: url('image/bg.jpeg') center/cover;
+}
+.banner-overlay {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to top, #1a1f2c, rgba(26, 31, 44, 0.2));
+}
+.game-profile {
+    position: absolute;
+    bottom: 12px;
+    left: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 2;
+}
+.game-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    border: 2px solid #f39c12;
+    object-fit: cover;
+}
+.game-title h2 {
+    font-size: 15px;
+    color: #ffffff;
+    font-weight: 700;
+}
+.game-title p {
+    font-size: 11px;
+    color: #a0aec0;
+}
+.alert-bar {
+    background: #c0392b;
+    color: white;
+    font-size: 11px;
+    padding: 8px 12px;
+    text-align: center;
+    font-weight: bold;
+    display: none;
+    transition: all 0.3s ease;
+}
+.section-box {
+    background: #222838;
+    margin: 12px;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #2f3851;
+}
+.section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #f39c12;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-title span {
+    background: #f39c12;
+    color: #12151c;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: bold;
+}
+.input-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 8px;
+}
+.input-group input {
+    width: 100%;
+    background: #12151c;
+    border: 1px solid #3b4663;
+    border-radius: 6px;
+    padding: 10px;
+    color: white;
+    font-size: 12px;
+    outline: none;
+}
+.input-group input:focus {
+    border-color: #f39c12;
+}
+#account-status {
+    font-size: 11px;
+    margin-top: 8px;
+    display: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+.reward-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+.reward-card {
+    background: #161a25;
+    border: 1px solid #2f3851;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.reward-card.active {
+    border-color: #f39c12;
+    background: rgba(243, 156, 18, 0.1);
+}
+.reward-card img {
+    width: 100%;
+    height: 90px;
+    object-fit: contain;
+    background: #0b0e14;
+    border-radius: 6px;
+    margin-bottom: 5px;
+}
+.reward-card .name {
+    font-size: 11px;
+    font-weight: bold;
+    color: #e2e8f0;
+}
+.bottom-bar {
+    position: fixed;
+    bottom: 0; left: 0; width: 100%;
+    background: #1a1f2c;
+    border-top: 1px solid #2a344d;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 99;
+}
+.selected-preview {
+    font-size: 11px;
+    color: #a0aec0;
+}
+.selected-preview strong {
+    color: #f39c12;
+    display: block;
+    font-size: 12px;
+}
+.btn-submit {
+    background: linear-gradient(135deg, #f39c12, #d35400);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    padding: 20px;
+}
+.modal-content {
+    background: #1a1f2c;
+    border: 1px solid #f39c12;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 340px;
+    padding: 20px;
+}
+.modal-content h3 {
+    color: #f39c12;
+    font-size: 15px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+.modal-content p {
+    font-size: 11px;
+    color: #a0aec0;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.login-field {
+    margin-bottom: 10px;
+}
+.login-field label {
+    font-size: 10px;
+    color: #cbd5e0;
+    display: block;
+    margin-bottom: 4px;
+}
+.login-field select, .login-field input {
+    width: 100%;
+    background: #12151c;
+    border: 1px solid #3b4663;
+    border-radius: 6px;
+    padding: 8px;
+    color: white;
+    font-size: 12px;
+    outline: none;
+}
+.btn-confirm-claim {
+    width: 100%;
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.custom-box {
+    text-align: center;
+}
+.btn-modal-close {
+    width: 100%;
+    background: #f39c12;
+    color: #12151c;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+}
