@@ -109,7 +109,7 @@ const skinAlbums = [
         ]
     },
     {
-        title: "The King of Fighters (KOF)",
+        title: "The King of Fighters",
         skins: [
             {name: "Guinevere — Athena Asamiya", img: "./kof/Guinevere.jpg"},
             {name: "Chou — Iori Yagami", img: "./kof/Chou.jpg"},
