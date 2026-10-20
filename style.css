@@ -30,12 +30,14 @@ body {
     position: relative;
     width: 100%;
     height: 160px;
-    background: #0b0e14;
+    background: url('image/bg.jpeg');
+    background-size: cover;
+    background-position: center;
 }
 .banner-overlay {
     position: absolute;
     bottom: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to top, #1a1f2c, rgba(26, 31, 44, 0.2));
+    background: linear-gradient(to top, #1a1f2c, rgba(26, 31, 44, 0.4));
 }
 .game-profile {
     position: absolute;
@@ -58,10 +60,13 @@ body {
     font-size: 15px;
     color: #ffffff;
     font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
 .game-title p {
     font-size: 11px;
-    color: #a0aec0;
+    color: #f39c12;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
 }
 .alert-bar {
     background: #c0392b;
