@@ -161,12 +161,12 @@ const skinAlbums = [
     {
         title: "Saint Seiya",
         skins: [
-            {name: "Badang — Pegasus Seiya", img: "./saint-saiya/Badang.jpg"},
-            {name: "Valir — Phoenix Ikki", img: "./saint-saiya/Valir.jpg"},
-            {name: "Chou — Dragon Shiryu", img: "./saint-saiya/Chou.jpg"},
-            {name: "Badang — Sagittarius Seiya", img: "./saint-saiya/Badang2.jpg"},
-            {name: "Valir — Leo Ikki", img: "./saint-saiya/Valir2.jpg"},
-            {name: "Chou — Libra Shiryu", img: "./saint-saiya/Chou2.jpg"}
+            {name: "Badang — Pegasus Seiya", img: "./saint-seiya/Badang.jpg"},
+            {name: "Valir — Phoenix Ikki", img: "./saint-seiya/Valir.jpg"},
+            {name: "Chou — Dragon Shiryu", img: "./saint-seiya/Chou.jpg"},
+            {name: "Badang — Sagittarius Seiya", img: "./saint-seiya/Badang2.jpg"},
+            {name: "Valir — Leo Ikki", img: "./saint-seiya/Valir2.jpg"},
+            {name: "Chou — Libra Shiryu", img: "./saint-seiya/Chou2.jpg"}
         ]
     },
     {
